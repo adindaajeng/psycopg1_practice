@@ -1,16 +1,21 @@
+#!pip install psycopg2-binary
+#!pip install python-dotenv
+
 # Import library
 import psycopg2
 import os
 from dotenv import load_dotenv, find_dotenv
 
 # Connect to Postgre
-# Create new database session and return a new connection object
-# The basic connection parameters including:
-# dbname - the database name
-# user - user name used to authenticate
-# password - password used to authenticate
-# host - database host address (defaults to UNIX socket if not provided)
-# port - connection port number (default to 5432 if not provided)
+"""
+Create a new database session and return a new connection object. The basic connection parameters are:
+
+dbname – the database name (database is a deprecated alias)
+user – user name used to authenticate
+password – password used to authenticate
+host – database host address (defaults to UNIX socket if not provided)
+port – connection port number (defaults to 5432 if not provided)
+"""
 
 # Load .Env
 load_dotenv(find_dotenv())
@@ -24,7 +29,20 @@ conn = psycopg2.connect(
 )
 
 # Create Cursor
-# Allows Python code to execute PostgreSQL command in a database session. Cursors are created by the connection.cursr() method
+"""
+Allows Python code to execute PostgreSQL command in a database session. Cursors are created by the connection.cursor() method: they are bound to the connection for the entire lifetime and all the commands are executed in the context of the database session wrapped by the connection. Cursor Method are:
+
+execute
+    DML, dan DDL yang outputnya cuma 1
+executemany
+    DML, dan DDL yang outputnya cuma tergantung n
+fetchone
+    read data dan menampilkan 1 hasil
+fetchmany
+    read data dan menampilkan n hasil
+fetchall
+    read data dan menampilkan semua hasil
+"""
 cur = conn.cursor()
 
 # Create table on selected database
@@ -49,3 +67,7 @@ cur.execute(
     '''
 )
 conn.commit()
+
+# Close Connection
+cur.close()
+conn.close()
